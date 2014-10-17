@@ -20,7 +20,7 @@
 
 int main()
 {
-    int ret = -1;
+    int ret = -1, rsize;
     int serverSock;
     int acceptedSock;
     struct sockaddr_in Addr;
@@ -50,11 +50,13 @@ int main()
         ret = -1;
         goto error;
     }
-    if ((ret = recv(acceptedSock, readBuf, MAX_DATA, 0)) <= 0) {
+    if ((rsize = recv(acceptedSock, readBuf, MAX_DATA, 0)) <= 0) {
         perror("recv");
         ret = -1;
-    } else
-        printf("Read %d Bytes: '%s'\n", ret, readBuf);
+    } else {
+        printf("Read %d Bytes: '%s'\n", rsize, readBuf);
+        ret = 0;
+    }
 
     close(acceptedSock);
 error:

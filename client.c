@@ -21,7 +21,7 @@
 int main()
 {
     int ret = -1;
-    int clientSock;
+    int clientSock, wsize;
     struct sockaddr_in serverAddr;
 
     if ((clientSock = socket(PF_INET, SOCK_STREAM, 0)) == -1) {
@@ -39,11 +39,13 @@ int main()
         goto error;
     }
 
-    if ((ret = send(clientSock, WRITE_DATA, sizeof(WRITE_DATA), 0)) <= 0) {
+    if ((wsize = send(clientSock, WRITE_DATA, sizeof(WRITE_DATA), 0)) <= 0) {
         perror("send");
         ret = -1;
-    } else
-        printf("Wrote '%s' (%d Bytes)\n", WRITE_DATA, ret);
+    } else {
+        printf("Wrote '%s' (%d Bytes)\n", WRITE_DATA, wsize);
+        ret = 0;
+    }
 
 error:
     close(clientSock);
